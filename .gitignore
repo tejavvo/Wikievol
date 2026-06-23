@@ -1,0 +1,21 @@
+**/node_modules
+
+**/__pycache__
+
+**/WikiEnv
+
+.env 
+
+id_ed25519
+
+.DS_Store
+
+*.csv
+
+# Build output (the client build is copied here for deployment)
+**/dist
+
+# Per-project data cache generated at runtime by the Flask app
+server/data/
+# Local Claude preview helper
+.claude/

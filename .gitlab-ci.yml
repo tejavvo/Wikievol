@@ -1,0 +1,36 @@
+# CI pipeline for WikiEvolution.
+# Replaces the placeholder template with real lint + build checks so that
+# broken frontend code or syntax errors are caught on every merge request.
+
+stages:
+  - lint
+  - build
+
+# ---- Frontend ----
+frontend-lint:
+  stage: lint
+  image: node:20
+  before_script:
+    - cd client
+    - npm ci
+  script:
+    - npm run lint
+
+frontend-build:
+  stage: build
+  image: node:20
+  before_script:
+    - cd client
+    - npm ci
+  script:
+    - npm run build
+
+# ---- Backend ----
+backend-syntax:
+  stage: lint
+  image: python:3.11
+  script:
+    - python -m pip install --upgrade pip
+    - pip install -r server/requirements.txt
+    # Fail the pipeline on any Python syntax error.
+    - python -m compileall server
