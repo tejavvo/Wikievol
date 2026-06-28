@@ -174,141 +174,164 @@ const SelectedArticles = ({ selectedRows, project }) => {
         { key: 'page_length', label: 'Page Length' },
     ];
 
-    return (
-        <div className="selected-articles">
-            {selectedRows.length > 0 && (
-                <div>
-                    <button onClick={downloadCSV} className="btn btn-primary">
-                        Download CSV
-                    </button>
-                    <button onClick={downloadTitles} className="btn btn-secondary">
-                        Download Titles
-                    </button>
+//     return (
+//         <div className="selected-articles">
+//             {selectedRows.length > 0 && (
+//                 <div>
+//                     <button onClick={downloadCSV} className="btn btn-primary">
+//                         Download CSV
+//                     </button>
+//                     <button onClick={downloadTitles} className="btn btn-secondary">
+//                         Download Titles
+//                     </button>
 
-                    <div className="plot-container">
-    {articleData.length > 0 && (
-        metrics.map(metric => {
-            const isSingleAxisMetric = ['pred_qual', 'page_length'].includes(metric.key);  // Add metrics that should only have one axis
-            
-            return (
-                <div key={metric.key} className="plot-item">
-                    <Plot
-                        data={[
-                            {
-                                x: articleData.map(d => d.month),
-                                y: articleData.map(d => d[metric.key]),
-                                type: 'scatter',
-                                mode: 'lines',
-                                name: `Mean ${metric.label}`,
-                                yaxis: 'y1',
-                                line: { color: 'blue' } // Set line color to blue for Mean
-                            },
-                            // Conditionally render the "Sum" line only for non-single-axis metrics
-                            ...(!isSingleAxisMetric ? [{
-                                x: articleData.map(d => d.month),
-                                y: articleData.map(d => d[`${metric.key}_sum`]),
-                                type: 'scatter',
-                                mode: 'lines',
-                                name: `Sum ${metric.label}`,
-                                yaxis: 'y2',
-                                line: { color: 'blue' } // Set line color to blue for Sum
-                            }] : [])
-                        ]}
-                        layout={{
-                            title: `${metric.label} over Time`,
-                            xaxis: {
-                                rangeselector: {
-                                    buttons: [
-                                        { count: 6, label: '6M', step: 'month', stepmode: 'backward' },
-                                        { count: 1, label: '1Y', step: 'year', stepmode: 'backward' },
-                                        { count: 5, label: '5Y', step: 'year', stepmode: 'backward' },
-                                        { step: 'all' }
-                                    ]
-                                },
-                                rangeslider: { visible: true },
-                                type: 'date'
-                            },
-                            yaxis: { 
-                                title: `Mean ${metric.label}`, 
-                                side: 'left', 
-                                showgrid: false 
-                            },
-                            // Conditionally add the second y-axis for non-single-axis metrics
-                            ...(!isSingleAxisMetric ? {
-                                yaxis2: {
-                                    title: `Sum ${metric.label}`,
-                                    overlaying: 'y',
-                                    side: 'right',
-                                    showgrid: false,
-                                }
-                            } : {}),
-                            template: 'plotly_white',
-                            showlegend: false,
-                            hovermode: 'x unified'
-                        }}
-                        config={{ displayModeBar: false }}
-                        useResizeHandler={true}
-                        style={{ width: "100%", height: "400px" }}
-                        hoverlabel={{
-                            bgcolor: "white",
-                            font: { size: 12 }
-                        }}
-                        hoverinfo="none"
-                        hovertemplate={`Month: %{x}<br>Mean: %{y}<br>Sum: %{customdata}`}
-                        customdata={articleData.map(d => d[`${metric.key}_sum`])}
-                    />
-                </div>
-            );
-        })
-    )}
-    {pageViewsData.length > 0 && (
-        <div className="plot-item">
-            <Plot
-                data={[
-                    {
-                        x: pageViewsData.map(d => d.month),
-                        y: pageViewsData.map(d => d.views),
-                        type: 'scatter',
-                        mode: 'lines',
-                        name: 'Page Views',
-                        line: { color: 'blue' }, // Set line color to blue for Page Views
-                        hovertemplate: `Month: %{x}<br>Page Views: %{y}<extra></extra>`
-                    }
-                ]}
-                layout={{
-                    title: `Page Views over Time`,
-                    xaxis: {
-                        rangeselector: {
-                            buttons: [
-                                { count: 6, label: '6M', step: 'month', stepmode: 'backward' },
-                                { count: 1, label: '1Y', step: 'year', stepmode: 'backward' },
-                                { count: 5, label: '5Y', step: 'year', stepmode: 'backward' },
-                                { step: 'all' }
-                            ]
-                        },
-                        rangeslider: { visible: true },
-                        type: 'date'
-                    },
-                    yaxis: { title: 'Mean Page Views' },
-                    template: 'plotly_white',
-                    showlegend: false
-                }}
-                config={{ displayModeBar: false }}
-                useResizeHandler={true}
-                style={{ width: "100%", height: "400px" }}
-            />
-        </div>
-    )}
-</div>
+//                     <div className="plot-container">
+//                         {articleData.length > 0 && (
+//                             metrics.map(metric => {
+//                                 const isSingleAxisMetric = ['pred_qual', 'page_length'].includes(metric.key);  // Add metrics that should only have one axis
+                                
+//                                 return (
+//                                     <div key={metric.key} className="plot-item">
+//                                         <Plot
+//                                             data={[
+//                                                 {
+//                                                     x: articleData.map(d => d.month),
+//                                                     y: articleData.map(d => d[metric.key]),
+//                                                     type: 'scatter',
+//                                                     mode: 'lines',
+//                                                     name: `Mean ${metric.label}`,
+//                                                     yaxis: 'y1',
+//                                                     line: { color: 'blue' } // Set line color to blue for Mean
+//                                                 },
+//                                                 // Conditionally render the "Sum" line only for non-single-axis metrics
+//                                                 ...(!isSingleAxisMetric ? [{
+//                                                     x: articleData.map(d => d.month),
+//                                                     y: articleData.map(d => d[`${metric.key}_sum`]),
+//                                                     type: 'scatter',
+//                                                     mode: 'lines',
+//                                                     name: `Sum ${metric.label}`,
+//                                                     yaxis: 'y2',
+//                                                     line: { color: 'blue' } // Set line color to blue for Sum
+//                                                 }] : [])
+//                                             ]}
+//                                             layout={{
+//                                                 title: `${metric.label} over Time`,
+//                                                 xaxis: {
+//                                                     rangeselector: {
+//                                                         buttons: [
+//                                                             { count: 6, label: '6M', step: 'month', stepmode: 'backward' },
+//                                                             { count: 1, label: '1Y', step: 'year', stepmode: 'backward' },
+//                                                             { count: 5, label: '5Y', step: 'year', stepmode: 'backward' },
+//                                                             { step: 'all' }
+//                                                         ]
+//                                                     },
+//                                                     rangeslider: { visible: true },
+//                                                     type: 'date'
+//                                                 },
+//                                                 yaxis: { 
+//                                                     title: `Mean ${metric.label}`, 
+//                                                     side: 'left', 
+//                                                     showgrid: false 
+//                                                 },
+//                                                 // Conditionally add the second y-axis for non-single-axis metrics
+//                                                 ...(!isSingleAxisMetric ? {
+//                                                     yaxis2: {
+//                                                         title: `Sum ${metric.label}`,
+//                                                         overlaying: 'y',
+//                                                         side: 'right',
+//                                                         showgrid: false,
+//                                                     }
+//                                                 } : {}),
+//                                                 template: 'plotly_white',
+//                                                 showlegend: false,
+//                                                 hovermode: 'x unified'
+//                                             }}
+//                                             config={{ displayModeBar: false }}
+//                                             useResizeHandler={true}
+//                                             style={{ width: "100%", height: "400px" }}
+//                                             hoverlabel={{
+//                                                 bgcolor: "white",
+//                                                 font: { size: 12 }
+//                                             }}
+//                                             hoverinfo="none"
+//                                             hovertemplate={`Month: %{x}<br>Mean: %{y}<br>Sum: %{customdata}`}
+//                                             customdata={articleData.map(d => d[`${metric.key}_sum`])}
+//                                         />
+//                                     </div>
+//                                 );
+//                         })
+//                     )}
+//     {pageViewsData.length > 0 && (
+//         <div className="plot-item">
+//             <Plot
+//                 data={[
+//                     {
+//                         x: pageViewsData.map(d => d.month),
+//                         y: pageViewsData.map(d => d.views),
+//                         type: 'scatter',
+//                         mode: 'lines',
+//                         name: 'Page Views',
+//                         line: { color: 'blue' }, // Set line color to blue for Page Views
+//                         hovertemplate: `Month: %{x}<br>Page Views: %{y}<extra></extra>`
+//                     }
+//                 ]}
+//                 layout={{
+//                     title: `Page Views over Time`,
+//                     xaxis: {
+//                         rangeselector: {
+//                             buttons: [
+//                                 { count: 6, label: '6M', step: 'month', stepmode: 'backward' },
+//                                 { count: 1, label: '1Y', step: 'year', stepmode: 'backward' },
+//                                 { count: 5, label: '5Y', step: 'year', stepmode: 'backward' },
+//                                 { step: 'all' }
+//                             ]
+//                         },
+//                         rangeslider: { visible: true },
+//                         type: 'date'
+//                     },
+//                     yaxis: { title: 'Mean Page Views' },
+//                     template: 'plotly_white',
+//                     showlegend: false
+//                 }}
+//                 config={{ displayModeBar: false }}
+//                 useResizeHandler={true}
+//                 style={{ width: "100%", height: "400px" }}
+//             />
+//         </div>
+//     )}
+// </div>
 
 
-                </div>
-            )}
-            {selectedRows.length === 0 && (
-                <p>No articles selected.</p>
-            )}
-        </div>
-    );
-};
+//                 </div>
+//             )}
+//             {selectedRows.length === 0 && (
+//                 <p>No articles selected.</p>
+//             )}
+//         </div>
+//     );
+
+
+        return (
+            <div className="selected-articles">
+                {selectedRows.length > 0 && (
+                    <div>
+                        <button onClick={downloadCSV} className="btn btn-primary">
+                            Download CSV
+                        </button>
+                        <button onClick={downloadTitles} className="btn btn-secondary">
+                            Download Titles
+                        </button>
+                        <p style={{ marginTop: '10px', fontSize: '14px', color: '#666' }}>
+                            Selected articles shown above. Correlations visible in the heatmap.
+                        </p>
+                    </div>
+                )}
+                {selectedRows.length === 0 && (
+                    <p>No articles selected.</p>
+                )}
+            </div>
+        );
+    };
 
 export default SelectedArticles;
+

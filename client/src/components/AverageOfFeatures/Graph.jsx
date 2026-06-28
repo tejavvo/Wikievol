@@ -4,8 +4,18 @@ const Graph = ({ data, metrics }) => {
     if (data.length === 0) return <div>Loading...</div>;
 
     const allGraphs = metrics.map((metric) => {
-        const meanKey = `${metric}_mean`;
-        const sumKey = `${metric}_sum`;
+        const metricKeyMap = {
+            pred_qual: { mean: 'mean_pred_qual', sum: 'mean_pred_qual' },
+            num_refs: { mean: 'mean_refs', sum: 'sum_refs' },
+            num_media: { mean: 'mean_media', sum: 'sum_media' },
+            num_categories: { mean: 'mean_categories', sum: 'sum_categories' },
+            num_wikilinks: { mean: 'mean_wikilinks', sum: 'sum_wikilinks' },
+            num_headings: { mean: 'mean_headings', sum: 'sum_headings' },
+            page_length: { mean: 'mean_page_length', sum: 'sum_page_length' },
+        };
+
+        const meanKey = metricKeyMap[metric]?.mean;
+        const sumKey = metricKeyMap[metric]?.sum;
 
         const meanData = data.map(d => d[meanKey]);
         const sumData = data.map(d => d[sumKey]);
